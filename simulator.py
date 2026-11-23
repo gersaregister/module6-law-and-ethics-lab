@@ -194,7 +194,7 @@ def general_help():
     say("  status    show your score, legal risk and public trust")
     say("  save      save and quit; run python3 simulator.py later to resume")
     say("  commands  show this list of commands")
-    say(dim("  Stuck on a mission? README.md, Part 5, explains how to solve each one."))
+    say(dim("  Every answer, step by step, is in README.md, Part 5."))
 
 # ---------------------------------------------------------------- questions
 MONTHS = {m: i for i, m in enumerate(

@@ -13,7 +13,7 @@
 | **Where to turn it in** | The course website, by the due date posted there |
 | **Cost** | Free. You never need a credit card. |
 | **Work** | Individually |
-| **Everything you need** | Is in this guide. Read each part in order and you won't get stuck. |
+| **Everything you need** | Is in this guide, including every answer (Part 5). Read each part in order and you won't get stuck. |
 
 ---
 
@@ -23,7 +23,7 @@
 2. [Start the simulator](#part-2-start-the-simulator)
 3. [How to play](#part-3-how-to-play)
 4. [Your investigation toolkit](#part-4-your-investigation-toolkit)
-5. [How to solve each mission](#part-5-how-to-solve-each-mission)
+5. [Step-by-step answers for every mission](#part-5-step-by-step-answers-for-every-mission)
 6. [Write-up and turning in your work](#part-6-write-up-and-turning-in-your-work)
 7. [Stopping and coming back later](#part-7-stopping-and-coming-back-later)
 8. [Grading](#part-8-grading)
@@ -227,61 +227,193 @@ For safety, the investigation terminal only allows: `ls cat head tail wc grep aw
 
 ---
 
-## Part 5: How to solve each mission
+## Part 5: Step-by-step answers for every mission
 
-This explains **how** to find each answer, not the answers themselves. Read the mission here before (or while) you play it.
+This part gives you **every answer**, the command that finds it, and why it's right. Keep this guide open next to the simulator and follow along.
+
+**How to use it:**
+1. Read the mission's message in the simulator.
+2. Find the same mission below.
+3. For investigation questions, type `terminal`, copy the command shown here, paste it (**Ctrl+Shift+V**), press **Enter**, and check that you get the same number. Then type `back`.
+4. Type the answer at the `answer>` or `decide>` prompt.
+
+At a DECISION the choices appear in a **different order each time**, so the letter changes. Find the choice whose **words** match the "Best choice" below and type its letter.
+
+---
 
 ### Practice round (not scored)
-Follow the on-screen steps: `terminal`, then `ls case-files/leaked`, count the files, `back`, then type the number.
+| Step | Type this |
+|---|---|
+| Open the investigation terminal | `terminal` |
+| List the stolen files | `ls case-files/leaked` |
+| You'll see 3 files: customers.csv, employees.csv, supplier-terms.txt | |
+| Go back | `back` |
+| **Answer** | `3` |
 
-### Mission 1: Triage (from the CEO)
-1. **Read the case first:** `terminal`, then `cat case-files/incident-summary.txt`. Note the **discovery date and time**; you'll need them in Missions 3 and 5.
-2. **Customers:** count the lines in `customers.csv`, not counting the header.
-3. **SSNs:** an SSN looks like `123-45-6789`. Search all leaked files for 3 digits, a dash, 2 digits, a dash and 4 digits: replace `PATTERN` with `[0-9]{3}-[0-9]{2}-[0-9]{4}`.
-4. **Trade secret:** `cat case-files/leaked/supplier-terms.txt` and read the first line.
+---
 
-### Mission 2: Evidence (from the IT manager)
-- **Decision:** after a crime, police and lawyers need evidence. Is there a way to protect the evidence **and** still get the business running?
-- **Questions:** type `laws`. The **U.S. federal laws** table names the law about *unauthorized access*, and the **Who to contact** table names who investigates federal computer crimes.
+### Mission 1: Triage (from the CEO, Saturday 9:30 a.m.)
 
-### Mission 3: Florida law (from the lawyer). The most important mission.
-First type `laws` and read the **Florida (FIPA)** card carefully.
-1. **Florida customers with card + CVV:** count rows where column 6 is `FL` **and** column 8 is `card`.
-2. **Invoice customers:** FIPA lists exactly what counts as "personal information". Is a name plus email address, with **no password**, on that list?
-3. **Florida employees:** in `employees.csv`, count rows where column 7 is `FL`.
-4. **Total to notify:** add only the groups whose data meets FIPA's definition. Use your answers to 1–3.
-5. **Who to notify:** compare your total with FIPA's rules. Individuals are always notified. The Attorney General at **500 or more**. The credit bureaus at **more than 1,000**.
-6. **Deadline:** add **30 days** to the discovery date. March has 31 days. Answer like `2026-01-31`.
+Optional first step: read the case with `terminal`, then `cat case-files/incident-summary.txt`, then `back`. It says IT discovered the breach on **Saturday, March 21, 2026, at 9:15 a.m.**
 
-### Mission 4: Pressure (from the CFO)
-- **First decision:** the CFO wants to wait about 45 days. What does Florida law allow? When someone asks you to do something illegal, who should you take it to?
-- **Second decision:** which date is **legal** and best for the customers?
+**Question 1. How many customer records are in customers.csv?**
+- Command: `tail -n +2 case-files/leaked/customers.csv | wc -l`
+- **Answer: `2400`**
+- Why: the file has 2,401 lines. The first line is the column names, so there are 2,400 customers.
 
-### Mission 5: Beyond Florida (from the lawyer)
-1. **EU customers:** count customers by country (column 7) using `sort | uniq -c`, then add up DE (Germany), FR (France), IE (Ireland), ES (Spain) and NL (Netherlands).
-2. **GDPR hours:** read the **International (GDPR)** card.
-3. **GDPR decision:** count the hours from Saturday 9:15 a.m. to Monday 10:00 a.m. and compare with the GDPR limit.
-4. **Other states:** read the last bullet of the FIPA card.
-5. **HIPAA:** read **who** HIPAA covers. The incident summary says what kind of company Brightline is.
+**Question 2. How many Social Security numbers appear in the leaked files?**
+- Command: `grep -rEo "[0-9]{3}-[0-9]{2}-[0-9]{4}" case-files/leaked | wc -l`
+- **Answer: `140`**
+- Why: the command finds everything shaped like an SSN (123-45-6789). All 140 employees' SSNs were stolen.
 
-### Mission 6: Card data (from the card processor)
-- Read the **Industry standard (not a law)** card and the **Who to contact** table.
-- **Decision:** is Brightline allowed to keep this data **at all**?
+**Question 3. Which file contains a trade secret?**
+- Command (optional): `cat case-files/leaked/supplier-terms.txt`
+- **Answer: `c`** (supplier-terms.txt)
+- Why: its first line says "CONFIDENTIAL - TRADE SECRET". It holds secret supplier pricing, not personal data.
 
-### Mission 7: Is it authorized? (from the security tester)
-1. When asked, type `terminal`, then `cat case-files/rules-of-engagement.txt`, then `back`.
-2. For each request, check all four:
-   - Is it **only** the system 10.10.10.20?
-   - Is it **only** ports 80/443?
-   - Is it between **March 23 and 27**, from **8 a.m. to 6 p.m.**?
-   - Is it **not** on the NOT ALLOWED list?
-3. Answer `y` only if **all four** checks pass; otherwise `n`. Not sure? Type `hint` to see the answer and the reason.
+---
 
-### Mission 8: The rest of the week (people problems)
-No commands needed. Use the four decision questions from Part 3 and the **(ISC)² Code of Ethics** on the law cards. Think about what makes people *report* mistakes rather than hide them.
+### Mission 2: Evidence (from the IT manager, Saturday 11:00 a.m.)
+
+**Decision. Dana wants to wipe the server today.**
+- **Best choice:** "First make a forensic copy of the server and save its logs, then rebuild."
+- Why: wiping destroys the evidence police and lawyers need. Copying it first protects the evidence and still gets the business running.
+
+**Question 1. Which federal law makes logging in with a stolen password a crime?**
+- **Answer: `b`** (Computer Fraud and Abuse Act, CFAA)
+- Why: the CFAA makes it a crime to access a computer without authorization. A stolen password isn't permission.
+
+**Question 2. Who should the CEO report the computer crime to?**
+- **Answer: `a`** (the FBI, through the Internet Crime Complaint Center, IC3)
+- Why: the FBI investigates federal computer crimes.
+
+---
+
+### Mission 3: Florida law (from the lawyer, Sunday 10:00 a.m.)
+
+Florida's breach law is the **Florida Information Protection Act (FIPA)**. Type `laws` to read its card.
+
+**Question 1. How many Florida customers had their card number and security code (CVV) exposed?**
+- Command: `awk -F, '$6=="FL" && $8=="card"' case-files/leaked/customers.csv | wc -l`
+- **Answer: `912`**
+- Why: this counts rows where the state (column 6) is FL **and** the payment method (column 8) is card. Under FIPA, a card number plus its security code counts as personal information.
+
+**Question 2. Do invoice customers (name and email only) count as "personal information" under FIPA?**
+- **Answer: `b`** (No)
+- Why: FIPA needs a name **plus** something sensitive, such as an SSN, an ID number, a card number with its code, health information, or an email **with** a password. A name and email alone don't count.
+
+**Question 3. How many employees who live in Florida had their SSNs exposed?**
+- Command: `awk -F, '$7=="FL"' case-files/leaked/employees.csv | wc -l`
+- **Answer: `131`**
+- Why: this counts employees whose home state (column 7) is FL. An SSN with a name is personal information.
+
+**Question 4. How many Florida residents must Brightline notify in total?**
+- **Answer: `1043`**
+- Why: 912 customers + 131 employees = 1,043. The invoice customers aren't included because their data isn't FIPA personal information.
+
+**Question 5. Who must Brightline notify? (Choose all that apply.)**
+- **Answer: `a,b,c`**
+- Why:
+  - **a)** each affected Florida resident, always
+  - **b)** the Florida Department of Legal Affairs (Attorney General), because it's 500 or more people
+  - **c)** the credit bureaus, because it's more than 1,000 people
+  - Florida doesn't require TV stations to be told, and the U.S. Department of Health and Human Services is only for health breaches (HIPAA).
+
+**Question 6. What's the last day to notify Florida residents?**
+- **Answer: `2026-04-20`**
+- Why: FIPA allows no more than 30 days after discovery. March 21 + 30 days = April 20, 2026. (March 21 to March 31 is 10 days, plus 20 days in April.)
+
+---
+
+### Mission 4: Pressure (from the CFO, Monday 8:30 a.m.)
+
+**Decision 1. The CFO wants to delay the letters until after the spring sale (about 45 days).**
+- **Best choice:** "Explain that Florida requires notice within 30 days, and bring it to Rosa (counsel) and the CEO."
+- Why: 45 days breaks the law. The right move is to state the law politely and escalate through the proper channel.
+
+**Decision 2. When should Brightline notify Florida residents?**
+- **Best choice:** "Friday, March 27 (6 days after discovery)."
+- Why: it's legal and fast, so customers can protect themselves early. May 5 is 15 days late, which means a $15,000 fine.
+
+---
+
+### Mission 5: Beyond Florida (from the lawyer, Monday 10:00 a.m.)
+
+**Question 1. How many customers live in the European Union?**
+- Command: `awk -F, 'NR>1 {print $7}' case-files/leaked/customers.csv | sort | uniq -c`
+- The result lists: CA 30, **DE 40**, **ES 18**, **FR 30**, **IE 20**, **NL 12**, US 2250. (CA here means Canada, which isn't in the EU.)
+- **Answer: `120`**
+- Why: 40 + 18 + 30 + 20 + 12 = 120.
+
+**Question 2. How many hours does GDPR allow to report the breach?**
+- **Answer: `72`**
+- Why: GDPR, the EU privacy law, requires reporting to the EU authority within 72 hours of finding out.
+
+**Decision. It's Monday 10:00 a.m. What do you recommend?**
+- **Best choice:** "Report to the EU supervisory authority today. We're at about 49 hours."
+- Why: Saturday 9:15 a.m. to Monday 10:00 a.m. is about 49 hours, still inside 72. Waiting until Friday would be too late.
+
+**Question 3. What applies to customers from other U.S. states?**
+- **Answer: `b`** (each state's own breach law)
+- Why: every state has its own breach law protecting its own residents.
+
+**Question 4. Does HIPAA apply to Brightline?**
+- **Answer: `no`**
+- Why: HIPAA only covers health plans, health care providers, health care clearinghouses and their business partners. Brightline sells office supplies.
+
+---
+
+### Mission 6: Card data (from the card processor, Tuesday 9:00 a.m.)
+
+**Question 1. Which standard forbids storing card security codes?**
+- **Answer: `c`** (PCI DSS)
+- Why: the Payment Card Industry Data Security Standard forbids keeping CVVs after a payment is approved.
+
+**Question 2. Is PCI DSS a law passed by the government?**
+- **Answer: `no`**
+- Why: it's an industry standard set by the card companies and enforced through contracts. Breaking it still brings fines.
+
+**Question 3. Which federal agency investigates payment-card crimes?**
+- **Answer: `b`** (the U.S. Secret Service)
+- Why: the Secret Service investigates financial crimes, including card fraud.
+
+**Decision. Should the developer delete the stored CVVs?**
+- **Best choice:** "Delete all stored CVVs now and change checkout so they're never saved."
+- Why: Brightline isn't allowed to keep them at all. Even encrypted, they're still forbidden.
+
+---
+
+### Mission 7: Is it authorized? (from the security tester, Tuesday 11:00 a.m.)
+
+The rules (`cat case-files/rules-of-engagement.txt`) allow testing **only** the server 10.10.10.20, on ports 80 and 443, **March 23–27, 8 a.m.–6 p.m.**, with no social engineering, no flooding, and no copying data.
+
+| # | Request | Type | Why |
+|---|---|---|---|
+| 1 | Scan 10.10.10.20, ports 80 and 443, at 10 a.m. today | **`y`** | Right server, right ports, right time |
+| 2 | Scan the fileserver 10.10.10.30 too | **`n`** | Only 10.10.10.20 is allowed |
+| 3 | Email the sales team a fake invoice | **`n`** | Social engineering isn't allowed |
+| 4 | Run the scan at 2 a.m. | **`n`** | Only 8 a.m.–6 p.m. is allowed |
+| 5 | Try the test login found in the website's code | **`y`** | Logins found during the test may be used on the allowed server |
+| 6 | Download the customer database to study at home | **`n`** | Copying customer data isn't allowed |
+| 7 | Flood the website with traffic | **`n`** | Flooding (denial-of-service) isn't allowed |
+| 8 | Keep testing on Saturday, March 28 | **`n`** | Testing ends March 27 |
+
+---
+
+### Mission 8: The rest of the week (Wednesday to Friday)
+
+| Situation | Best choice | Why |
+|---|---|---|
+| Should Brightline fire Kim, who clicked the phishing link, and announce it? | "No. Retrain everyone, turn on multi-factor authentication, and praise fast reporting." | Blaming people makes staff hide mistakes. Training and MFA fix the real problem. |
+| A friend asks you to hack their company's website | "Decline, and explain they need written permission from the system owner..." | Testing without the owner's written permission is a crime (CFAA). |
+| A recruiter offers a bonus for Brightline's supplier pricing | "Decline the condition. You'll only consider the job without it." | Taking trade secrets is illegal (Economic Espionage Act). |
+| A coworker uses pirated software | "Talk to the coworker, then report it through IT's normal process." | Pirated software breaks copyright law and often carries malware. |
+| A reporter calls asking how many customers were affected | "Politely refer them to Brightline's spokesperson or legal counsel." | Only the official spokesperson should speak for the company. |
+
+---
 
 ### Final debrief
-You'll see your score, meters, headlines and fines, and your report is saved automatically. Then go to Part 6.
+Your score, meters, headlines and fines appear, and your report is saved automatically to `results/simulator-report.txt`. Next, go to Part 6 to do the write-up and turn in your work.
 
 ---
 
