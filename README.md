@@ -136,7 +136,7 @@ Every question shows a **"Where to look"** line telling you which file or law ca
 
 If you type the wrong format (for example, a word when a number is needed), the simulator tells you what to type. That doesn't count as a wrong answer.
 
-**`decide>` means a DECISION.** There's no single "correct answer". You choose what you'd do, and the simulator shows the consequence. Type the letter of your choice. To decide well, ask yourself:
+**`decide>` means a DECISION.** You choose what you'd do, and the simulator shows the consequence. Type the letter of your choice. Not sure? Type `hint` to see the strongest choice. To decide well, ask yourself:
 - Is it **legal**?
 - Is it **honest**?
 - Does it go through the **proper channel**?
@@ -149,17 +149,19 @@ If you type the wrong format (for example, a word when a number is needed), the 
 | `terminal` | Opens the **investigation terminal** (prompt changes to `investigate$`) so you can search the files. Type `back` to return to the question. |
 | `laws` | Opens the **law and ethics reference cards**. Scroll with the arrow keys; press `q` to return. |
 | `files` | Lists all case files. |
-| `hint` | Shows a hint, often the exact command to run. **Costs 3 points**, once per question. |
+| `hint` | **Shows the correct answer**, how to find it and why it's right, then moves on. You earn **3 points instead of 10**. |
 | `status` | Shows your score, legal risk and public trust. |
-| `help` | Shows the list of commands. |
+| `help` | Same as `hint`. |
+| `commands` | Shows the list of commands. |
 | `save` | Saves and quits. See Part 7. |
-| `skip` | Only after 3 wrong tries: shows the answer and moves on (0 points). |
 
-At a `decide>` prompt you can use `terminal`, `laws`, `files`, `status` and `save`.
+At a `decide>` prompt you can use `hint` (shows the strongest choice; picking it then earns 5 points instead of 10), `terminal`, `laws`, `files`, `status` and `save`.
+
+In Mission 7, typing `hint` at a request shows whether it's allowed and why (1 point instead of 3).
 
 ### Scoring
 - **Questions:** 10 points if right on the first try, 6 on the second, 3 on the third or later. Wrong answers never take away points; they only lower what the right answer earns.
-- **Hints:** cost 3 points each. A hint on the first try still nets 7 points, which is better than guessing.
+- **Hints:** `hint` (or `help`) shows the answer right away: 3 points for a question, 5 for a decision, 1 for a Mission 7 request. Try on your own first to earn full points.
 - **Decisions:** up to 10 points each, depending on how sound the choice is.
 - **Mission 7:** 3 points for each correct allowed/not-allowed call.
 - **Maximum:** 304 points.
@@ -273,7 +275,7 @@ First type `laws` and read the **Florida (FIPA)** card carefully.
    - Is it **only** ports 80/443?
    - Is it between **March 23 and 27**, from **8 a.m. to 6 p.m.**?
    - Is it **not** on the NOT ALLOWED list?
-3. Answer `y` only if **all four** checks pass; otherwise `n`.
+3. Answer `y` only if **all four** checks pass; otherwise `n`. Not sure? Type `hint` to see the answer and the reason.
 
 ### Mission 8: The rest of the week (people problems)
 No commands needed. Use the four decision questions from Part 3 and the **(ISC)² Code of Ethics** on the law cards. Think about what makes people *report* mistakes rather than hide them.
@@ -349,13 +351,13 @@ It's not recommended; the screen is too small for the terminal. Use a laptop, de
 Do the simulator and write-up individually.
 
 **What if I get an answer wrong?**
-Try again. Wrong answers don't take away points; they only lower what the right answer earns. After 2 tries, use `hint`. After 3 wrong tries you can `skip`.
+Try again. Wrong answers don't take away points; they only lower what the right answer earns. If you're stuck, type `hint` to see the answer and move on.
 
 **What if I make a bad decision?**
 You'll see the consequences, which is part of learning. Finish the game, then replay to try a better path. Your best attempt counts.
 
-**Are the hints worth it?**
-Yes, when you're stuck. A hint costs 3 points, while each wrong guess lowers what you can earn.
+**What does `hint` do?**
+It shows the correct answer, how to find it, and why it's right, so you're never stuck. You earn fewer points (3 instead of 10 for a question), so try on your own first. Read the "How to find it" line; it teaches you how to solve similar questions.
 
 **Can I replay the whole simulator?**
 Yes, as many times as you want. Type `python3 simulator.py` after you finish. All finished attempts stay in your report.

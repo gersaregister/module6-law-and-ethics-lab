@@ -181,7 +181,7 @@ def show_files():
                 print("  " + p)
     say(dim("Read one with:  terminal  then  cat case-files/incident-summary.txt"))
 
-HELP_LINE = dim("Commands: terminal | laws | files | hint | status | save | help")
+HELP_LINE = dim("Stuck? Type  hint  to see the answer.  Other commands: terminal | laws | files | status | save | commands")
 
 def general_help():
     say(cyan("HOW TO PLAY"))
@@ -189,10 +189,11 @@ def general_help():
     say("  terminal  open the investigation terminal to search the stolen files")
     say("  laws      read the law and ethics reference cards")
     say("  files     list the case files")
-    say("  hint      get a hint for this question (costs 3 points)")
+    say("  hint      show the correct answer and how to find it (you earn 3 points instead of 10)")
+    say("  help      same as hint")
     say("  status    show your score, legal risk and public trust")
     say("  save      save and quit; run python3 simulator.py later to resume")
-    say("  skip      after 3 wrong tries, see the answer and move on (0 points)")
+    say("  commands  show this list of commands")
     say(dim("  Stuck on a mission? README.md, Part 5, explains how to solve each one."))
 
 # ---------------------------------------------------------------- questions
@@ -270,27 +271,20 @@ def question(st, q):
             show_files(); continue
         if low == "status":
             status(st); continue
-        if low == "help":
+        if low in ("commands", "menu"):
             general_help(); continue
         if low == "save":
             raise SaveAndQuit()
-        if low == "hint":
-            if not hinted:
-                hinted = True
-                st.score -= 3
-                st.hints += 1
-                say(cyan("HINT (-3 points): ") + q["hint"])
-            else:
-                say(cyan("HINT: ") + q["hint"])
-            continue
-        if low == "skip":
-            if tries >= 3:
-                say(yellow("Answer: ") + q["reveal"])
-                say(q["explain"], indent="   ")
-                st.log.append(f"{q['id']}: skipped after {tries} tries")
-                return False
-            say(dim(f"You can skip after 3 tries (you've made {tries})."))
-            continue
+        if low in ("hint", "help", "skip", "answer", "?"):
+            st.hints += 1
+            st.score += 3
+            print()
+            say(cyan("ANSWER: ") + bold(q["reveal"]))
+            say(cyan("How to find it: ") + q["hint"], indent="   ")
+            say(cyan("Why: ") + q["explain"], indent="   ")
+            say(yellow("+3 points (answer shown). Moving on."))
+            st.log.append(f"{q['id']}: answer shown via hint (+3)")
+            return False
         n = norm(q["kind"], raw, q.get("options"))
         if q["kind"] == "mc" and (len(n) != 1 or n not in letters[:len(q["options"])]):
             say(dim(f"Type just the letter of your choice, for example  b")); continue
@@ -308,16 +302,9 @@ def question(st, q):
             st.score += pts
             say(green(f"Correct! +{pts} points"))
             say(q["explain"], indent="   ")
-            st.log.append(f"{q['id']}: correct on try {tries} (+{pts}){' [hint]' if hinted else ''}")
+            st.log.append(f"{q['id']}: correct on try {tries} (+{pts})")
             return True
-        msg = "Not quite. Try again"
-        msg += " (type hint for help)." if not hinted else "."
-        if tries >= 3:
-            msg += " Or type skip to see the answer and move on."
-        say(red(msg))
-        if tries == 2 and not hinted:
-            say(dim("Stuck? Re-read 'Where to look' above, or type  hint  (costs 3 points). "
-                    "Wrong answers don't cost points; they only lower what a right answer earns."))
+        say(red("Not quite. Try again, or type  hint  to see the answer."))
 
 def decision(st, d):
     """d: id, text, choices=[(text, pts, legal, trust, flag, outcome)]"""
@@ -329,9 +316,20 @@ def decision(st, d):
     letters = "abcdef"[: len(choices)]
     for L, ch in zip(letters, choices):
         say(ch[0], indent=f"   {L}) ")
-    print(dim("Commands: terminal | laws | files | status | save"))
+    print(dim("Not sure? Type  hint  to see the strongest choice.  Other commands: terminal | laws | files | status | save"))
+    best = max(ch[1] for ch in d["choices"])
+    hinted = False
     while True:
         raw = ask(yellow("decide> ")).strip().lower()
+        if raw in ("hint", "help", "?"):
+            for L, ch in zip(letters, choices):
+                if ch[1] == best:
+                    say(cyan("HINT: ") + f"The strongest choice is  {L}) {ch[0]}")
+            say(dim("Type that letter to choose it (you'll earn 5 points instead of 10), or pick another."))
+            if not hinted:
+                hinted = True
+                st.hints += 1
+            continue
         if raw == "terminal":
             terminal(); continue
         if raw == "laws":
@@ -346,12 +344,13 @@ def decision(st, d):
             break
         say(dim(f"Type one letter ({'/'.join(letters)})."))
     text, pts, legal, trust, flag, outcome = choices[letters.index(raw)]
+    if hinted:
+        pts = min(pts, 5)
     st.score += pts
     st.adjust(legal, trust)
     if flag:
         st.flags[flag] = True
-    best = max(ch[1] for ch in d["choices"])
-    label = green("STRONG CHOICE") if pts == best else yellow("RISKY CHOICE") if pts > 0 else red("BAD CHOICE")
+    label = green("STRONG CHOICE") if choices[letters.index(raw)][1] == best else yellow("RISKY CHOICE") if pts > 0 else red("BAD CHOICE")
     print()
     say(f"{label}  (+{pts} points)")
     say(outcome, indent="   ")
@@ -410,9 +409,12 @@ def m0_practice(st):
             terminal()
             say(bold("Back to the practice question. ") + "How many files are in case-files/leaked ?")
             continue
-        if raw == "help":
-            general_help(); continue
-        if raw in ("skip", "save"):
+        if raw in ("hint", "help", "?"):
+            say(cyan("ANSWER: ") + bold("3") + "  (customers.csv, employees.csv and supplier-terms.txt). "
+                "In the real missions, hint works the same way: it shows the answer and how to find it, "
+                "and you earn 3 points instead of 10.")
+            break
+        if raw in ("skip", "save", "commands"):
             break
         if not raw:
             continue
@@ -424,7 +426,9 @@ def m0_practice(st):
     say("\nTwo more things to know:")
     say("- At a DECISION, you type the letter of your choice. There are no hints for decisions, "
         "so think about what is legal, honest and goes through the proper channel.", indent="  ")
-    say("- Type  save  at any prompt to stop and come back later. Type  help  for all commands.",
+    say("- Stuck on any question? Type  hint  (or  help ) to see the answer and how to find it. "
+        "You'll earn 3 points instead of 10, so try first!", indent="  ")
+    say("- Type  save  at any prompt to stop and come back later. Type  commands  for the full list.",
         indent="  ")
     say(bold("\nThe real missions start now. Good luck!"))
     pause()
@@ -703,12 +707,21 @@ def m7_pentest(st):
         st.max_score += 3
         print()
         say(bold(f"Request {i} of {len(reqs)}: ") + f"\"{text}\"")
+        shown = False
         while True:
-            a = ask(yellow("Allowed? (y/n, or terminal to re-read the rules) > ")).strip().lower()
+            a = ask(yellow("Allowed? (y/n, hint to see the answer, terminal to re-read the rules) > ")).strip().lower()
             if a == "terminal":
                 terminal(); continue
+            if a in ("hint", "help", "?"):
+                shown = True
+                break
             if a in ("y", "yes", "n", "no"):
                 break
+        if shown:
+            st.hints += 1
+            st.score += 1
+            say(cyan("ANSWER: ") + bold("Allowed" if allowed else "NOT allowed") + "  (+1 point)  " + why)
+            continue
         correct = (a.startswith("y") == allowed)
         if correct:
             right += 1
