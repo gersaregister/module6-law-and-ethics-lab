@@ -1,0 +1,27 @@
+BRIGHTLINE SUPPLY CO. - INCIDENT SUMMARY            CONFIDENTIAL
+Incident #: IR-2026-007
+Prepared by: Dana Whitfield, IT Manager
+
+WHAT HAPPENED
+- Friday, March 20, 2026, 7:40 p.m.: An attacker logged in to the shared
+  file server using an employee's password, which had been stolen in a
+  phishing email.
+- The attacker copied three files from the \\FILESERVER\Shared folder:
+    1. customers.csv          (customer list exported from the online store)
+    2. employees.csv          (HR export, saved to the shared folder by mistake)
+    3. supplier-terms.txt     (confidential pricing agreement with a supplier)
+- Saturday, March 21, 2026, 9:15 a.m.: IT discovered the activity in the
+  server logs and confirmed the files were taken. This is the DISCOVERY DATE.
+- The files were not encrypted.
+
+WHAT WE KNOW ABOUT THE DATA
+- Copies of all three files are in the "leaked" folder for your analysis.
+- No person appears in both customers.csv and employees.csv.
+- Brightline sells office supplies. It is not a hospital, doctor's office,
+  health insurer or bank.
+- Brightline is a private company (not traded on the stock market).
+
+YOUR ROLE
+You are Brightline's new security analyst. Leadership needs to know which
+laws apply, who must be notified, and by when. Legal counsel will make the
+final call, but they need your facts first.

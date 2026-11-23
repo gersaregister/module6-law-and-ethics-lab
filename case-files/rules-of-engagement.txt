@@ -1,0 +1,30 @@
+PENETRATION TEST - RULES OF ENGAGEMENT (Authorization Letter)
+
+Client:        Brightline Supply Co.
+Tester:        SecureCheck Consulting (you are on this team)
+Authorized by: Marcus Bell, CEO, signed March 22, 2026
+
+1. IN-SCOPE SYSTEMS
+   - webserver, IP address 10.10.10.20, ports 80 and 443 only
+   No other systems, IP addresses or networks are authorized.
+
+2. TESTING WINDOW
+   - March 23 through March 27, 2026
+   - Between 8:00 a.m. and 6:00 p.m. Eastern Time only
+
+3. ALLOWED
+   - Port and vulnerability scanning of in-scope systems
+   - Attempting to log in to in-scope systems with credentials
+     discovered during the test
+   - Reviewing public website content
+
+4. NOT ALLOWED
+   - Social engineering of any kind (phishing emails, phone calls,
+     visiting the office in person)
+   - Denial-of-service (flooding or crashing systems)
+   - Copying, downloading or keeping customer or employee data.
+     If you find such data, stop, record its location and report it
+     to the CEO within 24 hours.
+   - Reading employee email or personal files
+
+5. Anything not listed above requires written approval from the CEO first.

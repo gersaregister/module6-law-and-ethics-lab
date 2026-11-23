@@ -1,0 +1,21 @@
+{
+  "name": "Module 6 Lab: Breach Response Simulator",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postAttachCommand": "echo; echo '=== Module 6 Lab ready. To start, type:  python3 simulator.py  and press Enter ==='; echo",
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
+    "vscode": {
+      "settings": {
+        "workbench.startupEditor": "none",
+        "workbench.editorAssociations": {
+          "*.md": "vscode.markdown.preview.editor"
+        },
+        "terminal.integrated.fontSize": 15
+      }
+    }
+  }
+}

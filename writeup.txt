@@ -1,0 +1,65 @@
+MODULE 6 LAB - WRITE-UP
+Breach Response Simulator, Brightline Supply Co.
+
+Your name:
+Your best simulator score (from results/simulator-report.txt):
+Verification code of that attempt:
+
+HOW TO FILL THIS IN
+- Type your answer under each question, replacing "Your answer:" with
+  a short paragraph (3-5 sentences).
+- Press Ctrl+S to save (Cmd+S on a Mac).
+- When finished: right-click writeup.txt in the file list on the left,
+  choose Download, and upload it to the course website together with
+  results/simulator-report.txt.
+
+------------------------------------------------------------------
+1. LAW VS. ETHICS
+Florida allows up to 30 days to notify people after a breach. Why
+might notifying in 6 days be the ethical choice, even though 30 days
+is legal?
+
+Your answer:
+
+
+------------------------------------------------------------------
+2. DEFINITIONS MATTER
+Why didn't the "invoice" customers (name and email only) count under
+Florida's law (FIPA), when they DO count under the EU's GDPR?
+
+Your answer:
+
+
+------------------------------------------------------------------
+3. POLICY VS. LAW
+PCI DSS is not a law. Why does Brightline still have to follow it?
+
+Your answer:
+
+
+------------------------------------------------------------------
+4. DETERRENCE
+Module 6 says laws deter people only when three conditions exist:
+fear of the penalty, a real chance of being caught, and a real chance
+the penalty will be applied. Apply these to the attacker in this
+case. Is the attacker likely to be deterred? Why or why not?
+
+Your answer:
+
+
+------------------------------------------------------------------
+5. THE HUMAN FACTOR
+The breach began with one phishing click, and grew because an HR file
+was saved to a shared folder. What ONE policy would you put in place
+first, and why?
+
+Your answer:
+
+
+------------------------------------------------------------------
+6. YOUR TOUGHEST CALL
+Which decision in the simulator was hardest for you? What did you
+choose, what happened, and what did you learn?
+
+Your answer:
+

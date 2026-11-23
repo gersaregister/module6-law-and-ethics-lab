@@ -1,0 +1,12 @@
+REQUESTS FROM THE JUNIOR TESTER (Tuesday, March 24, 2026)
+Decide whether each one is IN SCOPE (allowed) or OUT OF SCOPE (not allowed)
+under rules-of-engagement.txt.
+
+1. "I'd like to run an Nmap scan of 10.10.10.20, ports 80 and 443, at 10 a.m. today."
+2. "The fileserver at 10.10.10.30 is on the same network, so I'll scan it too."
+3. "Let's email the sales team a fake invoice to see who clicks."
+4. "The website is slow during the day, so I'll run the vulnerability scan at 2 a.m. tonight instead."
+5. "I found a test login in the website's HTML comments. I want to try it on the website's login page."
+6. "There's a customer database in /old-backup/. I'll download it so I can study it at home."
+7. "Let's send a flood of traffic to the website to see how much it can take."
+8. "We're behind. I'll keep testing on Saturday, March 28."
