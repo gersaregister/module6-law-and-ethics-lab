@@ -143,7 +143,8 @@ def terminal():
         if cmd == "clear":
             os.system("clear")
             continue
-        if any(bad in cmd for bad in (";", "&", "`", "$(", ">", "<")):
+        outside = re.sub(r"'[^']*'|\"[^\"]*\"", "", cmd)   # ignore text inside quotes
+        if any(bad in outside for bad in (";", "&", ">", "<")) or "`" in cmd or "$(" in cmd:
             say(yellow("For safety, ; & > < ` and $( are turned off here. Use pipes ( | ) instead."))
             continue
         bad_word = None
